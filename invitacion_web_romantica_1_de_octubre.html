@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invitación Especial 💛✨</title>
+  <style>
+    :root{
+      --amarillo-flor: #ffef8b;
+      --amarillo-fondo: #fff7c2;
+      --rosa-acento: #ff7aa2;
+      --rojo: #e63946;
+      --texto: #4a4a4a;
+      --card: #ffffff;
+    }
+
+    body{
+      margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+      padding:24px 12px;
+      background-color: var(--amarillo-fondo);
+      background-image:
+        radial-gradient(circle at 10% 10%, rgba(255,239,139,0.6) 0 20px, transparent 21px),
+        radial-gradient(circle at 80% 20%, rgba(255,239,139,0.7) 0 16px, transparent 17px),
+        radial-gradient(circle at 20% 80%, rgba(255,239,139,0.6) 0 14px, transparent 15px),
+        radial-gradient(circle at 60% 70%, rgba(255,215,170,0.5) 0 18px, transparent 19px);
+      background-size: auto, auto, auto, auto, 180px 180px;
+      background-blend-mode: multiply;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--texto);
+    }
+
+    .card{
+      width:min(1080px, 96vw);
+      background: var(--card);
+      border-radius: 22px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.18);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 420px 1fr;
+      gap:0;
+      animation: pop 700ms ease;
+    }
+    @media (max-width: 860px){ .card{ grid-template-columns: 1fr; } }
+
+    .left{
+      padding:40px 32px;
+      display:flex; flex-direction:column; justify-content:flex-start; align-items:flex-start; gap:18px;
+      background: linear-gradient(145deg, #fff, #fff6d6);
+    }
+    .right{ position:relative; background:#fff; min-height:420px; }
+
+    h1{ margin:0; font-size:clamp(28px, 3.6vw, 44px); color:#d84b6a; line-height:1.2; }
+    h2{ margin:.4rem 0 0; font-weight:600; color:#b23b55; font-size:clamp(20px, 2.4vw, 24px); }
+    p{ line-height:1.7; margin:0; font-size:clamp(16px,2.2vw,19px); max-width:95%; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      background: var(--amarillo-flor);
+      color:#6e5400; font-weight:700; padding:8px 14px; border-radius:999px; font-size:15px;
+    }
+
+    .buttons{ display:flex; gap:12px; margin-top:14px; flex-wrap:wrap; }
+    .btn{
+      appearance:none; border:none; cursor:pointer; font-weight:700;
+      padding:12px 18px; border-radius:12px; transition: transform .08s ease, box-shadow .2s;
+    }
+    .btn-primary{ background: var(--rosa-acento); color:#fff; box-shadow:0 8px 16px rgba(255,122,162,.35); }
+    .btn-primary:active{ transform: translateY(1px); }
+    .btn-outline{ background:#fff; color:#d84b6a; border:2px solid #ffd1dc; }
+
+    .audio-wrap{ display:flex; align-items:center; gap:8px; margin-top:12px; width:100%; }
+    audio{ width:100%; height:36px; }
+    .audio-hint{ font-size:13px; color:#6e5400; }
+
+    .carousel{ position:relative; height:100%; min-height:420px; display:flex; align-items:center; justify-content:center; background:#fff; }
+    .slide{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .slide img{ width:100%; height:100%; object-fit:cover; }
+
+    .nav-btn{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.92); border:none; 
+      width:42px; height:42px; border-radius:50%; cursor:pointer; font-size:20px; box-shadow:0 6px 18px rgba(0,0,0,.2); }
+    .prev{ left:12px; } .next{ right:12px; }
+
+    .dots{ position:absolute; bottom:10px; left:0; right:0; display:flex; gap:6px; justify-content:center; }
+    .dot{ width:9px; height:9px; border-radius:50%; background: #ffd1dc; opacity:.7; }
+    .dot.active{ background:#ff7aa2; opacity:1; }
+
+    .heart{ position:fixed; bottom:-20px; font-size:18px; animation: floatUp 4.5s linear forwards; pointer-events:none; }
+    @keyframes floatUp { to{ transform: translateY(-110vh); opacity:0; } }
+    @keyframes pop{ from{ opacity:0; transform: scale(.97);} to{ opacity:1; transform: scale(1);} }
+      /* Modal activación audio */
+    .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.38); display:none; align-items:center; justify-content:center; padding:16px; z-index:9999; }
+    .modal-backdrop.open{ display:flex; }
+    .modal{ background:#fff; border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.35); width:min(520px, 92vw); padding:24px; text-align:center; }
+    .modal h3{ margin:0 0 6px; color:#b23b55; font-size:clamp(18px,2.6vw,22px); }
+    .modal p{ margin:0 0 16px; color:#6e5400; }
+      /* Responsive tweaks */
+    @media (max-width: 860px){
+      body{ padding:12px 8px; }
+      .card{ grid-template-columns: 1fr; width:min(720px, 100vw); }
+      .left{ padding:28px 20px; align-items:flex-start; gap:14px; }
+      h1{ font-size:clamp(26px, 8vw, 36px); }
+      h2{ font-size:clamp(18px, 5vw, 22px); }
+      p{ font-size:clamp(15px, 4.2vw, 18px); line-height:1.7; max-width:100%; }
+      .buttons{ gap:10px; }
+      .buttons .btn{ width:100%; text-align:center; padding:14px 16px; }
+      .carousel{ min-height:300px; }
+      .nav-btn{ width:48px; height:48px; font-size:22px; }
+      .dots{ bottom:12px; }
+      .dot{ width:10px; height:10px; }
+      .modal{ width:min(92vw, 520px); padding:20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <section class="left">
+      <span class="pill">💛 1 de octubre</span>
+      <h1>¿Cenamos mañana? ✨</h1>
+      <p>Piponaaa, mañana celebramos otro mes juntos y quiero invitarte a una cenita especial. 
+        Desde el <strong>1 de marzo de 2018</strong> hasta hoy <strong>1 de octubre de 2025</strong> cumplimos <strong>91 meses</strong> de amor. 🫶</p>
+      <h2>Plan</h2>
+      <p>📍 Lugar: <strong>Astor Restaurante</strong><br />🕤 Hora: <strong>21:30</strong><br />🍰 Postre: sorpresa 😉</p>
+
+      <div class="buttons">
+        <button class="btn btn-primary" id="btn-acepto">¡Sí, claro! 💕</button>
+        <a class="btn btn-outline" href="https://drive.google.com/file/d/1SALFHGLAud-KttHakYwLtefA7jmQRDbH/view" target="_blank" rel="noopener">📜 Ver carta</a>
+        <a class="btn btn-outline" href="https://www.instagram.com/astor.restaurante?igsh=Y25lcnEzcnl3NmVw" target="_blank" rel="noopener">📷 Instagram</a>
+        <a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&query=Astor%20Restaurante" target="_blank" rel="noopener">🗺️ Abrir en Maps</a>
+      </div>
+
+      <div class="audio-wrap">
+        <span class="audio-hint" id="audio-hint" style="display:none;">🔊 Toca una vez para activar el sonido</span>
+        <audio id="player" src="./audio/cancion.mp3" preload="auto" autoplay loop muted playsinline></audio>
+      </div>
+    </section>
+
+    <section class="right">
+      <div class="carousel" aria-label="Carrusel de fotos">
+        <button class="nav-btn prev" aria-label="Foto anterior">‹</button>
+        <div class="slide"><img id="slideImg" alt="Foto de nosotros" /></div>
+        <button class="nav-btn next" aria-label="Foto siguiente">›</button>
+        <div class="dots" id="dots"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal: activar audio -->
+  <div class="modal-backdrop" id="audioModal" aria-modal="true" role="dialog">
+    <div class="modal">
+      <h3>¿Activar música? 🎵</h3>
+      <p>Para que suene flori durante la invitación, tocá el botón.</p>
+      <button class="btn btn-primary" id="enable-audio">Activar música</button>
+    </div>
+  </div>
+
+  <script>
+    const slideImg = document.getElementById('slideImg');
+    const dots = document.getElementById('dots');
+    const prev = document.querySelector('.prev');
+    const next = document.querySelector('.next');
+
+    let images = [];
+    let index = 0; let timer = null;
+
+    function renderDots(){
+      dots.innerHTML = images.map((_, i)=>`<span class="dot ${i===index?'active':''}"></span>`).join('');
+    }
+    function show(idx){
+      if(images.length===0) { slideImg.src = ''; return; }
+      index = (idx + images.length) % images.length;
+      slideImg.src = images[index];
+      renderDots();
+    }
+    function auto(){
+      clearInterval(timer);
+      timer = setInterval(()=> show(index+1), 4200);
+    }
+
+    prev.addEventListener('click', ()=>{ show(index-1); auto(); });
+    next.addEventListener('click', ()=>{ show(index+1); auto(); });
+
+    (async function loadFolderImages(){
+      const numbers = Array.from({length:60}, (_,i)=> i+1);
+      const exts = ['jpg','jpeg','png','webp','heic','HEIC'];
+      const candidates = [];
+      numbers.forEach(n => exts.forEach(e => candidates.push(`fotos/${n}.${e}`)));
+      function test(url){
+        return new Promise(res => { const im=new Image(); im.onload=()=>res(url); im.onerror=()=>res(null); im.src=url; });
+      }
+      const results = await Promise.all(candidates.map(test));
+      images = results.filter(Boolean);
+      if(images.length===0){
+        const common = ['foto','img','image','love','nosotros'];
+        const extra = [];
+        common.forEach(name => exts.forEach(e => extra.push(`fotos/${name}.${e}`)));
+        const r2 = await Promise.all(extra.map(test));
+        images = r2.filter(Boolean);
+      }
+      if(images.length===0){
+        console.warn('No se encontraron imágenes visibles. Convertí a JPG/PNG si usás Chrome.');
+      }
+      show(0); auto();
+    })();
+
+    const player = document.getElementById('player');
+    const hint = document.getElementById('audio-hint');
+    // Mostramos un modal para cumplir con políticas de autoplay
+    const audioModal = document.getElementById('audioModal');
+    const enableBtn = document.getElementById('enable-audio');
+
+    function startAudio(){ player.play().catch(()=>{}); }
+    document.addEventListener('DOMContentLoaded', ()=>{
+      audioModal.classList.add('open');
+      startAudio(); // precarga
+      hint && (hint.style.display='none');
+    });
+    window.addEventListener('load', startAudio);
+
+    enableBtn.addEventListener('click', ()=>{
+      try{ player.muted = false; }catch(e){}
+      player.play().catch(()=>{});
+      audioModal.classList.remove('open');
+    });
+
+    const btnAcepto = document.getElementById('btn-acepto');
+    btnAcepto.addEventListener('click', ()=>{
+      lanzarCorazones();
+    });
+    function lanzarCorazones(){
+      const n = 24;
+      for(let i=0;i<n;i++){
+        const h = document.createElement('div');
+        h.className='heart';
+        h.textContent = ['💛','💗','💖','💘'][Math.floor(Math.random()*4)];
+        h.style.left = Math.random()*100 + 'vw';
+        h.style.animationDuration = (3 + Math.random()*2) + 's';
+        h.style.fontSize = (16 + Math.random()*18) + 'px';
+        document.body.appendChild(h);
+        setTimeout(()=> h.remove(), 5000);
+      }
+    }
+      // Swipe para móvil
+    (function enableSwipe(){
+      const area = document.querySelector('.carousel');
+      if(!area) return;
+      let x0 = null, t0 = 0;
+      const TH=40; // umbral px
+      area.addEventListener('touchstart', e=>{ x0 = e.touches[0].clientX; t0 = Date.now(); }, {passive:true});
+      area.addEventListener('touchend', e=>{
+        if(x0==null) return; const dx = e.changedTouches[0].clientX - x0; const dt = Date.now()-t0; x0=null;
+        if(Math.abs(dx) > TH && dt < 600){ if(dx<0){ show(index+1); } else { show(index-1); } auto(); }
+      }, {passive:true});
+    })();
+  </script>
+</body>
+</html>
