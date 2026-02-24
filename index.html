@@ -103,7 +103,7 @@
             inset: 0;
             pointer-events: none;
             overflow: hidden;
-            z-index: 2;
+            z-index: 0;
         }
 
         .memory {
@@ -275,10 +275,18 @@
 
         .reveal-photo {
             display: none;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #f6c8d5;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(95vw, 1100px);
+            max-height: 92vh;
+            z-index: 20;
+            border-radius: 16px;
+            overflow-y: auto;
+            border: 1px solid #efb8c9;
             background: #fff;
+            box-shadow: 0 14px 28px rgba(185, 95, 121, 0.2);
             animation: revealIn .5s ease;
         }
 
@@ -289,17 +297,91 @@
         .reveal-photo img {
             width: 100%;
             display: block;
-            max-height: 340px;
-            object-fit: cover;
+            max-height: 75vh;
+            object-fit: contain;
         }
 
         .reveal-photo p {
             margin: 0;
             text-align: center;
-            padding: 10px;
-            font-size: 14px;
+            padding: 14px 16px;
+            font-size: clamp(15px, 2.2vw, 18px);
             font-weight: 600;
-            color: #985167;
+            color: #8e4660;
+            line-height: 1.5;
+        }
+
+        .reveal-btn-container {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 15;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 231, 238, 0.65), rgba(255, 208, 222, 0.45));
+            backdrop-filter: blur(8px);
+            padding: 20px;
+        }
+
+        .reveal-btn-container.visible {
+            display: flex;
+        }
+
+        .reveal-button {
+            background: linear-gradient(145deg, var(--primary), var(--primary-2));
+            border: none;
+            border-radius: 16px;
+            padding: 18px 36px;
+            font-family: "Segoe Script", "Brush Script MT", cursive;
+            font-size: clamp(20px, 4vw, 28px);
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 18px 42px rgba(216, 93, 137, 0.45), 0 0 28px rgba(224, 138, 160, 0.35);
+            cursor: pointer;
+            transition: all .15s ease;
+            animation: revealBtnPulse 2.2s ease-in-out infinite;
+        }
+
+        .reveal-button:hover {
+            transform: scale(1.04);
+            box-shadow: 0 22px 52px rgba(216, 93, 137, 0.55), 0 0 36px rgba(224, 138, 160, 0.45);
+        }
+
+        .reveal-button:active {
+            transform: scale(0.98);
+        }
+
+        .explosion-heart {
+            position: fixed;
+            z-index: 16;
+            pointer-events: none;
+            animation: heartExplode 1.8s ease-out forwards;
+        }
+
+        @keyframes revealBtnPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 18px 42px rgba(216, 93, 137, 0.45), 0 0 28px rgba(224, 138, 160, 0.35);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 22px 52px rgba(216, 93, 137, 0.55), 0 0 40px rgba(224, 138, 160, 0.5);
+            }
+        }
+
+        @keyframes heartExplode {
+            0% {
+                transform: translate(0, 0) scale(0.4) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1.2) rotate(var(--rotation));
+                opacity: 0;
+            }
         }
 
         .audio {
@@ -460,6 +542,20 @@
                 max-width: 70vw;
                 font-size: clamp(15px, 4.6vw, 19px);
             }
+
+            .reveal-photo {
+                width: 96vw;
+                max-height: 94vh;
+            }
+
+            .reveal-photo img {
+                max-height: 70vh;
+            }
+
+            .reveal-photo p {
+                padding: 12px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -468,6 +564,12 @@
     <div class="intro-hearts" id="introHearts" aria-hidden="true"></div>
     <div class="floating-memories" id="floatingMemories" aria-hidden="true"></div>
     <div class="floating-phrases" id="floatingPhrases" aria-hidden="true"></div>
+
+    <div class="reveal-btn-container" id="revealBtnContainer">
+        <button class="reveal-button" id="revealButton">
+            ✨ Revelar sorpresa ✨
+        </button>
+    </div>
 
     <main class="stage">
         <section class="card">
@@ -503,15 +605,16 @@
             </div>
             <div class="reveal" id="reveal">🔒 El regalo se revela el 3 de marzo.</div>
 
-            <div class="reveal-photo" id="revealPhoto">
-                <img src="fotos/revelacion.png" alt="Sorpresa especial" id="revealImg" />
-                <p>🎁 Sorpresa desbloqueada: este momento es todo para vos.</p>
-            </div>
-
             <audio class="audio" id="audio" src="audio/cancion.mp3" preload="auto" autoplay loop muted
                 playsinline></audio>
         </section>
     </main>
+
+    <div class="reveal-photo" id="revealPhoto">
+        <img src="fotos/revelacion.png" alt="Sorpresa especial" id="revealImg" />
+        <p>🎁 Por fin vamos a poder cumplir este sueñito juntos: nuestro viajecito de egresados. Te amo
+            muchísimo; ahora a planear el hospedaje y los destinos.</p>
+    </div>
 
     <div class="modal-bg" id="audioModal" aria-modal="true" role="dialog">
         <div class="modal">
@@ -551,8 +654,12 @@
 
         const el = {
             stage: document.querySelector('.stage'),
+            card: document.querySelector('.card'),
             introHearts: document.getElementById('introHearts'),
             floatingPhrases: document.getElementById('floatingPhrases'),
+            floatingMemories: document.getElementById('floatingMemories'),
+            revealBtnContainer: document.getElementById('revealBtnContainer'),
+            revealButton: document.getElementById('revealButton'),
             d: document.getElementById('d'),
             h: document.getElementById('h'),
             m: document.getElementById('m'),
@@ -584,9 +691,68 @@
 
         function revealNow() {
             if (revealDone) return;
-            el.reveal.textContent = '🎁 Llegó el momento: tu gran regalo está acá.';
-            el.revealPhoto.classList.add('visible');
             revealDone = true;
+
+            // Ocultar todo el contenido de la card
+            if (el.card) {
+                el.card.style.opacity = '0';
+                setTimeout(() => {
+                    el.card.style.display = 'none';
+                }, 600);
+            }
+
+            // Ocultar fotos y frases flotantes
+            if (el.floatingMemories) el.floatingMemories.style.opacity = '0';
+            if (el.floatingPhrases) el.floatingPhrases.style.opacity = '0';
+
+            // Mostrar el contenedor del botón de revelación
+            setTimeout(() => {
+                el.revealBtnContainer.classList.add('visible');
+            }, 700);
+        }
+
+        function launchExplosion() {
+            const icons = ['💗', '💖', '💛', '💘', '💞', '💕', '💓'];
+            const explosionCount = 65;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            for (let i = 0; i < explosionCount; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'explosion-heart';
+                    heart.textContent = icons[Math.floor(Math.random() * icons.length)];
+                    heart.style.fontSize = `${18 + Math.random() * 36}px`;
+                    heart.style.left = `${centerX}px`;
+                    heart.style.top = `${centerY}px`;
+
+                    const angle = (Math.PI * 2 * i) / explosionCount + Math.random() * 0.5;
+                    const distance = 250 + Math.random() * 450;
+                    const tx = Math.cos(angle) * distance;
+                    const ty = Math.sin(angle) * distance;
+                    const rotation = -180 + Math.random() * 360;
+
+                    heart.style.setProperty('--tx', `${tx}px`);
+                    heart.style.setProperty('--ty', `${ty}px`);
+                    heart.style.setProperty('--rotation', `${rotation}deg`);
+
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 2000);
+                }, i * 12);
+            }
+        }
+
+        function handleRevealButtonClick() {
+            // Ocultar botón
+            el.revealBtnContainer.classList.remove('visible');
+
+            // Lanzar explosión de corazones
+            launchExplosion();
+
+            // Después de la explosión, mostrar la sorpresa
+            setTimeout(() => {
+                el.revealPhoto.classList.add('visible');
+            }, 1200);
         }
 
         function updateCountdown() {
@@ -783,6 +949,9 @@
 
             updateCountdown();
             setInterval(updateCountdown, 1000);
+
+            // Configurar el evento click del botón de revelación
+            el.revealButton.addEventListener('click', handleRevealButtonClick);
 
             await runIntroSequence();
             setupAudio();
