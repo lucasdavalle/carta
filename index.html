@@ -1,256 +1,795 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Invitación Especial 💛✨</title>
-  <style>
-    :root{
-      --amarillo-flor: #ffef8b;
-      --amarillo-fondo: #fff7c2;
-      --rosa-acento: #ff7aa2;
-      --rojo: #e63946;
-      --texto: #4a4a4a;
-      --card: #ffffff;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carta Especial ✨</title>
+    <style>
+        :root {
+            --card: rgba(255, 250, 250, 0.92);
+            --card-border: rgba(255, 221, 228, 0.9);
+            --text: #5a3f46;
+            --title: #c65f7f;
+            --accent: #f5a8a8;
+            --primary: #e08aa0;
+            --primary-2: #b95f79;
+        }
 
-    body{
-      margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-      padding:24px 12px;
-      background-color: var(--amarillo-fondo);
-      background-image:
-        radial-gradient(circle at 10% 10%, rgba(255,239,139,0.6) 0 20px, transparent 21px),
-        radial-gradient(circle at 80% 20%, rgba(255,239,139,0.7) 0 16px, transparent 17px),
-        radial-gradient(circle at 20% 80%, rgba(255,239,139,0.6) 0 14px, transparent 15px),
-        radial-gradient(circle at 60% 70%, rgba(255,215,170,0.5) 0 18px, transparent 19px);
-      background-size: auto, auto, auto, auto, 180px 180px;
-      background-blend-mode: multiply;
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--texto);
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    .card{
-      width:min(1080px, 96vw);
-      background: var(--card);
-      border-radius: 22px;
-      box-shadow: 0 18px 50px rgba(0,0,0,.18);
-      overflow:hidden;
-      display:grid;
-      grid-template-columns: 420px 1fr;
-      gap:0;
-      animation: pop 700ms ease;
-    }
-    @media (max-width: 860px){ .card{ grid-template-columns: 1fr; } }
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--text);
+        }
 
-    .left{
-      padding:40px 32px;
-      display:flex; flex-direction:column; justify-content:flex-start; align-items:flex-start; gap:18px;
-      background: linear-gradient(145deg, #fff, #fff6d6);
-    }
-    .right{ position:relative; background:#fff; min-height:420px; }
+        em,
+        .script {
+            font-family: "Segoe Script", "Brush Script MT", cursive;
+            letter-spacing: 0.2px;
+        }
 
-    h1{ margin:0; font-size:clamp(28px, 3.6vw, 44px); color:#d84b6a; line-height:1.2; }
-    h2{ margin:.4rem 0 0; font-weight:600; color:#b23b55; font-size:clamp(20px, 2.4vw, 24px); }
-    p{ line-height:1.7; margin:0; font-size:clamp(16px,2.2vw,19px); max-width:95%; }
+        body {
+            position: relative;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            background-image: url("fotos/colage.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      background: var(--amarillo-flor);
-      color:#6e5400; font-weight:700; padding:8px 14px; border-radius:999px; font-size:15px;
-    }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            backdrop-filter: blur(6px);
+            background: linear-gradient(160deg, rgba(255, 226, 226, 0.52), rgba(255, 203, 216, 0.42));
+            z-index: 0;
+            pointer-events: none;
+        }
 
-    .buttons{ display:flex; gap:12px; margin-top:14px; flex-wrap:wrap; }
-    .btn{
-      appearance:none; border:none; cursor:pointer; font-weight:700;
-      padding:12px 18px; border-radius:12px; transition: transform .08s ease, box-shadow .2s;
-    }
-    .btn-primary{ background: var(--rosa-acento); color:#fff; box-shadow:0 8px 16px rgba(255,122,162,.35); }
-    .btn-primary:active{ transform: translateY(1px); }
-    .btn-outline{ background:#fff; color:#d84b6a; border:2px solid #ffd1dc; }
+        .stage {
+            position: relative;
+            z-index: 1;
+            width: min(940px, 95vw);
+            opacity: 0;
+            transform: translateY(14px) scale(0.985);
+            transition: opacity 700ms ease, transform 700ms ease;
+        }
 
-    .audio-wrap{ display:flex; align-items:center; gap:8px; margin-top:12px; width:100%; }
-    audio{ width:100%; height:36px; }
-    .audio-hint{ font-size:13px; color:#6e5400; }
+        .stage.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
 
-    .carousel{ position:relative; height:100%; min-height:420px; display:flex; align-items:center; justify-content:center; background:#fff; }
-    .slide{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-    .slide img{ width:100%; height:100%; object-fit:cover; }
+        .intro-hearts {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 231, 238, 0.22), rgba(255, 208, 222, 0.14));
+        }
 
-    .nav-btn{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.92); border:none; 
-      width:42px; height:42px; border-radius:50%; cursor:pointer; font-size:20px; box-shadow:0 6px 18px rgba(0,0,0,.2); }
-    .prev{ left:12px; } .next{ right:12px; }
+        .intro-heart {
+            position: absolute;
+            bottom: -36px;
+            animation: introHeartRise linear forwards;
+            filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.15));
+        }
 
-    .dots{ position:absolute; bottom:10px; left:0; right:0; display:flex; gap:6px; justify-content:center; }
-    .dot{ width:9px; height:9px; border-radius:50%; background: #ffd1dc; opacity:.7; }
-    .dot.active{ background:#ff7aa2; opacity:1; }
+        .intro-hearts.done {
+            animation: introFadeOut 550ms ease forwards;
+        }
 
-    .heart{ position:fixed; bottom:-20px; font-size:18px; animation: floatUp 4.5s linear forwards; pointer-events:none; }
-    @keyframes floatUp { to{ transform: translateY(-110vh); opacity:0; } }
-    @keyframes pop{ from{ opacity:0; transform: scale(.97);} to{ opacity:1; transform: scale(1);} }
-      /* Modal activación audio */
-    .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.38); display:none; align-items:center; justify-content:center; padding:16px; z-index:9999; }
-    .modal-backdrop.open{ display:flex; }
-    .modal{ background:#fff; border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.35); width:min(520px, 92vw); padding:24px; text-align:center; }
-    .modal h3{ margin:0 0 6px; color:#b23b55; font-size:clamp(18px,2.6vw,22px); }
-    .modal p{ margin:0 0 16px; color:#6e5400; }
-      /* Responsive tweaks */
-    @media (max-width: 860px){
-      body{ padding:12px 8px; }
-      .card{ grid-template-columns: 1fr; width:min(720px, 100vw); }
-      .left{ padding:28px 20px; align-items:flex-start; gap:14px; }
-      h1{ font-size:clamp(26px, 8vw, 36px); }
-      h2{ font-size:clamp(18px, 5vw, 22px); }
-      p{ font-size:clamp(15px, 4.2vw, 18px); line-height:1.7; max-width:100%; }
-      .buttons{ gap:10px; }
-      .buttons .btn{ width:100%; text-align:center; padding:14px 16px; }
-      .carousel{ min-height:300px; }
-      .nav-btn{ width:48px; height:48px; font-size:22px; }
-      .dots{ bottom:12px; }
-      .dot{ width:10px; height:10px; }
-      .modal{ width:min(92vw, 520px); padding:20px; }
-    }
-  </style>
+        .floating-memories {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .floating-phrases {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .memory {
+            position: absolute;
+            width: clamp(90px, 12vw, 150px);
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 4px solid rgba(255, 245, 248, 0.95);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            animation: floatInOut 18s linear infinite;
+        }
+
+        .phrase {
+            position: absolute;
+            max-width: min(45vw, 320px);
+            font-size: clamp(16px, 2.2vw, 22px);
+            color: rgba(152, 81, 103, 0.72);
+            text-shadow: 0 2px 8px rgba(255, 255, 255, 0.65);
+            font-style: italic;
+            font-family: "Segoe Script", "Brush Script MT", cursive;
+            opacity: 0;
+            animation: floatInOut 22s linear infinite;
+            white-space: nowrap;
+        }
+
+        .card {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 22px;
+            box-shadow: 0 20px 56px rgba(0, 0, 0, 0.22);
+            backdrop-filter: blur(2px);
+            padding: clamp(20px, 3vw, 34px);
+            display: grid;
+            gap: 14px;
+            animation: cardIntro 700ms ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge {
+            display: inline-flex;
+            width: fit-content;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-weight: 700;
+            font-size: 14px;
+            color: #9a5968;
+            background: rgba(255, 234, 238, 0.95);
+            border: 1px solid rgba(224, 138, 160, 0.42);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--title);
+            font-size: clamp(30px, 5vw, 46px);
+            line-height: 1.08;
+        }
+
+        .text {
+            margin: 0;
+            font-size: clamp(16px, 2.2vw, 19px);
+            line-height: 1.7;
+        }
+
+        .letter {
+            border-radius: 14px;
+            border: 1px dashed #f0b2c2;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 14px;
+            font-size: 15px;
+            line-height: 1.72;
+            color: #6c4b54;
+        }
+
+        .countdown {
+            border-radius: 14px;
+            border: 1px solid rgba(240, 178, 194, 0.55);
+            background: rgba(255, 243, 246, 0.94);
+            padding: 12px;
+        }
+
+        .countdown p {
+            margin: 0 0 10px;
+            color: #a16474;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .clock {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .clock-item {
+            border-radius: 10px;
+            background: #fffdfd;
+            padding: 9px 6px;
+            text-align: center;
+            border: 1px solid #f8d3dc;
+        }
+
+        .clock-value {
+            display: block;
+            color: var(--primary);
+            font-size: clamp(20px, 3.2vw, 26px);
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .clock-label {
+            display: block;
+            margin-top: 5px;
+            color: #9a6574;
+            font-size: 12px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 11px 16px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform .08s ease;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 10px 24px rgba(216, 93, 137, 0.35);
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: var(--primary-2);
+            border: 2px solid #f7c9d5;
+        }
+
+        .hint,
+        .reveal {
+            border-radius: 11px;
+            padding: 10px 12px;
+            font-size: 15px;
+            line-height: 1.55;
+        }
+
+        .hint {
+            background: rgba(255, 242, 245, 0.96);
+            border-left: 4px solid var(--accent);
+        }
+
+        .reveal {
+            background: #fff;
+            border: 1px solid #f4c3d0;
+            color: #9f4564;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .reveal-photo {
+            display: none;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #f6c8d5;
+            background: #fff;
+            animation: revealIn .5s ease;
+        }
+
+        .reveal-photo.visible {
+            display: block;
+        }
+
+        .reveal-photo img {
+            width: 100%;
+            display: block;
+            max-height: 340px;
+            object-fit: cover;
+        }
+
+        .reveal-photo p {
+            margin: 0;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #985167;
+        }
+
+        .audio {
+            width: 100%;
+            height: 36px;
+        }
+
+        .modal-bg {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.38);
+            z-index: 10;
+            padding: 16px;
+        }
+
+        .modal-bg.open {
+            display: flex;
+        }
+
+        .modal {
+            width: min(460px, 92vw);
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 22px 56px rgba(0, 0, 0, 0.35);
+            padding: 22px;
+            text-align: center;
+        }
+
+        .modal h3 {
+            margin: 0 0 8px;
+            color: #b85d79;
+            font-size: 22px;
+        }
+
+        .modal p {
+            margin: 0 0 14px;
+            line-height: 1.5;
+            color: #8f5f6d;
+        }
+
+        .heart {
+            position: fixed;
+            bottom: -16px;
+            z-index: 8;
+            pointer-events: none;
+            animation: heartUp 4.5s linear forwards;
+        }
+
+        @keyframes heartUp {
+            to {
+                transform: translateY(-115vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes cardIntro {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes revealIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatInOut {
+            0% {
+                transform: translateY(20px) rotate(-4deg);
+                opacity: 0;
+            }
+
+            12% {
+                opacity: .48;
+            }
+
+            50% {
+                transform: translateY(-24px) rotate(4deg);
+                opacity: .72;
+            }
+
+            88% {
+                opacity: .42;
+            }
+
+            100% {
+                transform: translateY(20px) rotate(-4deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes introHeartRise {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            12% {
+                opacity: .95;
+            }
+
+            50% {
+                transform: translateY(-50vh) translateX(18px) rotate(10deg);
+                opacity: .92;
+            }
+
+            100% {
+                transform: translateY(-120vh) translateX(-20px) rotate(-12deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes introFadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .clock {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 430px) {
+            body {
+                padding: 14px;
+            }
+
+            .card {
+                border-radius: 18px;
+                gap: 12px;
+                padding: 18px 16px;
+            }
+
+            .badge {
+                font-size: 12px;
+            }
+
+            .phrase {
+                max-width: 70vw;
+                font-size: clamp(15px, 4.6vw, 19px);
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <main class="card" role="main">
-    <section class="left">
-      <span class="pill">💛 1 de octubre</span>
-      <h1>¿Cenamos mañana? ✨</h1>
-      <p>Piponaaa, mañana celebramos otro mes juntos y quiero invitarte a una cenita especial. 
-        Desde el <strong>1 de marzo de 2018</strong> hasta hoy <strong>1 de octubre de 2025</strong> cumplimos <strong>91 meses</strong> de amor. 🫶</p>
-      <h2>Plan</h2>
-      <p>📍 Lugar: <strong>Astor Restaurante</strong><br />🕤 Hora: <strong>21:30</strong><br />🍰 Postre: sorpresa 😉</p>
+    <div class="intro-hearts" id="introHearts" aria-hidden="true"></div>
+    <div class="floating-memories" id="floatingMemories" aria-hidden="true"></div>
+    <div class="floating-phrases" id="floatingPhrases" aria-hidden="true"></div>
 
-      <div class="buttons">
-        <button class="btn btn-primary" id="btn-acepto">¡Sí, claro! 💕</button>
-        <a class="btn btn-outline" href="https://drive.google.com/file/d/1SALFHGLAud-KttHakYwLtefA7jmQRDbH/view" target="_blank" rel="noopener">📜 Ver carta</a>
-        <a class="btn btn-outline" href="https://www.instagram.com/astor.restaurante?igsh=Y25lcnEzcnl3NmVw" target="_blank" rel="noopener">📷 Instagram</a>
-        <a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&query=Astor%20Restaurante" target="_blank" rel="noopener">🗺️ Abrir en Maps</a>
-      </div>
+    <main class="stage">
+        <section class="card">
+            <span class="badge">💛 1 de marzo · 8 años</span>
+            <h1>Una carta <span class="script">para vos</span></h1>
 
-      <div class="audio-wrap">
-        <span class="audio-hint" id="audio-hint" style="display:none;">🔊 Toca una vez para activar el sonido</span>
-        <audio id="player" src="./audio/cancion.mp3" preload="auto" autoplay loop muted playsinline></audio>
-      </div>
-    </section>
+            <p class="text">
+                Amor, cumplimos 8 años de novios y también llega tu recibida. Estoy feliz de caminar la vida con vos.
+                Te preparé algo muy especial que se revela en tu gran día.
+            </p>
 
-    <section class="right">
-      <div class="carousel" aria-label="Carrusel de fotos">
-        <button class="nav-btn prev" aria-label="Foto anterior">‹</button>
-        <div class="slide"><img id="slideImg" alt="Foto de nosotros" /></div>
-        <button class="nav-btn next" aria-label="Foto siguiente">›</button>
-        <div class="dots" id="dots"></div>
-      </div>
-    </section>
-  </main>
+            <div class="letter">
+                <em>Si estos años fueron hermosos, lo que viene va a ser inolvidable.</em>
+                Hay un regalo que no entra en una caja, porque se vive y se siente con el corazón.
+                Cuando termine la cuenta regresiva, vas a descubrirlo.
+            </div>
 
-  <!-- Modal: activar audio -->
-  <div class="modal-backdrop" id="audioModal" aria-modal="true" role="dialog">
-    <div class="modal">
-      <h3>¿Activar música? 🎵</h3>
-      <p>Para que suene flori durante la invitación, tocá el botón.</p>
-      <button class="btn btn-primary" id="enable-audio">Activar música</button>
+            <div class="countdown" aria-live="polite">
+                <p>⏳ Cuenta regresiva para la revelación</p>
+                <div class="clock">
+                    <div class="clock-item"><span class="clock-value" id="d">00</span><span
+                            class="clock-label">Días</span></div>
+                    <div class="clock-item"><span class="clock-value" id="h">00</span><span
+                            class="clock-label">Horas</span></div>
+                    <div class="clock-item"><span class="clock-value" id="m">00</span><span
+                            class="clock-label">Min</span></div>
+                    <div class="clock-item"><span class="clock-value" id="s">00</span><span
+                            class="clock-label">Seg</span></div>
+                </div>
+            </div>
+
+            <div class="hint" id="hint">Mensaje inicial: sos mi lugar favorito en el mundo.
+            </div>
+            <div class="reveal" id="reveal">🔒 El regalo se revela el 3 de marzo.</div>
+
+            <div class="reveal-photo" id="revealPhoto">
+                <img src="fotos/revelacion.png" alt="Sorpresa especial" id="revealImg" />
+                <p>🎁 Sorpresa desbloqueada: este momento es todo para vos.</p>
+            </div>
+
+            <audio class="audio" id="audio" src="audio/cancion.mp3" preload="auto" autoplay loop muted
+                playsinline></audio>
+        </section>
+    </main>
+
+    <div class="modal-bg" id="audioModal" aria-modal="true" role="dialog">
+        <div class="modal">
+            <h3>¿Activar música? 🎵</h3>
+            <p>Para leer la carta con la canción de fondo, tocá el botón.</p>
+            <button class="btn btn-primary" id="enableAudio">Activar música</button>
+        </div>
     </div>
-  </div>
 
-  <script>
-    const slideImg = document.getElementById('slideImg');
-    const dots = document.getElementById('dots');
-    const prev = document.querySelector('.prev');
-    const next = document.querySelector('.next');
+    <script>
+        const PHOTO_FILES = [
+            'fotos/20240901_163433.jpg',
+            'fotos/20241225_202746.jpg',
+            'fotos/20250306_023322.jpg',
+            'fotos/20250306_100927.jpg',
+            'fotos/20250307_232158.jpg',
+            'fotos/IMG-20241230-WA0010.jpg',
+            'fotos/IMG-20250307-WA0008.jpg',
+            'fotos/IMG-20250529-WA0043.jpg'
+        ];
 
-    let images = [];
-    let index = 0; let timer = null;
+        const hints = [
+            'Mensaje 1: me encanta compartir la vida con vos.',
+            'Mensaje 2: tu sonrisa hace especial cualquier día.',
+            'Mensaje 3: gracias por estar en cada paso importante.',
+            'Mensaje 4: lo mejor de todo siempre somos nosotros.'
+        ];
 
-    function renderDots(){
-      dots.innerHTML = images.map((_, i)=>`<span class="dot ${i===index?'active':''}"></span>`).join('');
-    }
-    function show(idx){
-      if(images.length===0) { slideImg.src = ''; return; }
-      index = (idx + images.length) % images.length;
-      slideImg.src = images[index];
-      renderDots();
-    }
-    function auto(){
-      clearInterval(timer);
-      timer = setInterval(()=> show(index+1), 4200);
-    }
+        const floatingPhrases = [
+            'Siempre vos 💗',
+            'Te elijo cada día',
+            'Mi lugar favorito: a tu lado',
+            'Tu sonrisa es mi paz',
+            'Lo mejor siempre somos nosotros',
+            'Gracias por tanto amor'
+        ];
 
-    prev.addEventListener('click', ()=>{ show(index-1); auto(); });
-    next.addEventListener('click', ()=>{ show(index+1); auto(); });
+        const el = {
+            stage: document.querySelector('.stage'),
+            introHearts: document.getElementById('introHearts'),
+            floatingPhrases: document.getElementById('floatingPhrases'),
+            d: document.getElementById('d'),
+            h: document.getElementById('h'),
+            m: document.getElementById('m'),
+            s: document.getElementById('s'),
+            hint: document.getElementById('hint'),
+            reveal: document.getElementById('reveal'),
+            revealPhoto: document.getElementById('revealPhoto'),
+            revealImg: document.getElementById('revealImg'),
+            floating: document.getElementById('floatingMemories'),
+            audio: document.getElementById('audio'),
+            audioModal: document.getElementById('audioModal'),
+            enableAudio: document.getElementById('enableAudio')
+        };
 
-    (async function loadFolderImages(){
-      const numbers = Array.from({length:60}, (_,i)=> i+1);
-      const exts = ['jpg','jpeg','png','webp','heic','HEIC'];
-      const candidates = [];
-      numbers.forEach(n => exts.forEach(e => candidates.push(`fotos/${n}.${e}`)));
-      function test(url){
-        return new Promise(res => { const im=new Image(); im.onload=()=>res(url); im.onerror=()=>res(null); im.src=url; });
-      }
-      const results = await Promise.all(candidates.map(test));
-      images = results.filter(Boolean);
-      if(images.length===0){
-        const common = ['foto','img','image','love','nosotros'];
-        const extra = [];
-        common.forEach(name => exts.forEach(e => extra.push(`fotos/${name}.${e}`)));
-        const r2 = await Promise.all(extra.map(test));
-        images = r2.filter(Boolean);
-      }
-      if(images.length===0){
-        console.warn('No se encontraron imágenes visibles. Convertí a JPG/PNG si usás Chrome.');
-      }
-      show(0); auto();
-    })();
+        let revealDone = false;
+        let activePhotos = [];
+        let countdownTarget = getTargetDate();
 
-    const player = document.getElementById('player');
-    const hint = document.getElementById('audio-hint');
-    // Mostramos un modal para cumplir con políticas de autoplay
-    const audioModal = document.getElementById('audioModal');
-    const enableBtn = document.getElementById('enable-audio');
+        function pad(n) {
+            return String(n).padStart(2, '0');
+        }
 
-    function startAudio(){ player.play().catch(()=>{}); }
-    document.addEventListener('DOMContentLoaded', ()=>{
-      audioModal.classList.add('open');
-      startAudio(); // precarga
-      hint && (hint.style.display='none');
-    });
-    window.addEventListener('load', startAudio);
+        function getTargetDate() {
+            const now = new Date();
+            const y = now.getFullYear();
+            const d = new Date(y, 2, 3, 0, 0, 0);
+            return now <= d ? d : new Date(y + 1, 2, 3, 0, 0, 0);
+        }
 
-    enableBtn.addEventListener('click', ()=>{
-      try{ player.muted = false; }catch(e){}
-      player.play().catch(()=>{});
-      audioModal.classList.remove('open');
-    });
+        function revealNow() {
+            if (revealDone) return;
+            el.reveal.textContent = '🎁 Llegó el momento: tu gran regalo está acá.';
+            el.revealPhoto.classList.add('visible');
+            revealDone = true;
+        }
 
-    const btnAcepto = document.getElementById('btn-acepto');
-    btnAcepto.addEventListener('click', ()=>{
-      lanzarCorazones();
-    });
-    function lanzarCorazones(){
-      const n = 24;
-      for(let i=0;i<n;i++){
-        const h = document.createElement('div');
-        h.className='heart';
-        h.textContent = ['💛','💗','💖','💘'][Math.floor(Math.random()*4)];
-        h.style.left = Math.random()*100 + 'vw';
-        h.style.animationDuration = (3 + Math.random()*2) + 's';
-        h.style.fontSize = (16 + Math.random()*18) + 'px';
-        document.body.appendChild(h);
-        setTimeout(()=> h.remove(), 5000);
-      }
-    }
-      // Swipe para móvil
-    (function enableSwipe(){
-      const area = document.querySelector('.carousel');
-      if(!area) return;
-      let x0 = null, t0 = 0;
-      const TH=40; // umbral px
-      area.addEventListener('touchstart', e=>{ x0 = e.touches[0].clientX; t0 = Date.now(); }, {passive:true});
-      area.addEventListener('touchend', e=>{
-        if(x0==null) return; const dx = e.changedTouches[0].clientX - x0; const dt = Date.now()-t0; x0=null;
-        if(Math.abs(dx) > TH && dt < 600){ if(dx<0){ show(index+1); } else { show(index-1); } auto(); }
-      }, {passive:true});
-    })();
-  </script>
+        function updateCountdown() {
+            const diff = countdownTarget - new Date();
+            if (diff <= 0) {
+                el.d.textContent = '00';
+                el.h.textContent = '00';
+                el.m.textContent = '00';
+                el.s.textContent = '00';
+                revealNow();
+                return;
+            }
+
+            const total = Math.floor(diff / 1000);
+            const d = Math.floor(total / 86400);
+            const h = Math.floor((total % 86400) / 3600);
+            const m = Math.floor((total % 3600) / 60);
+            const s = total % 60;
+
+            el.d.textContent = pad(d);
+            el.h.textContent = pad(h);
+            el.m.textContent = pad(m);
+            el.s.textContent = pad(s);
+        }
+
+        function setDevMode(seconds) {
+            const safeSeconds = Math.max(3, Number(seconds) || 25);
+            countdownTarget = new Date(Date.now() + safeSeconds * 1000);
+            revealDone = false;
+            el.revealPhoto.classList.remove('visible');
+            el.reveal.textContent = '🔒 Modo dev activo: prueba de revelación en curso.';
+            el.hint.textContent = `🧪 Prueba rápida: revelación en ${safeSeconds} segundos.`;
+            updateCountdown();
+        }
+
+        function setupSecretDev() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('dev') === '1') {
+                setDevMode(40);
+            }
+
+            const secret = 'modocarta';
+            let typed = '';
+            window.addEventListener('keydown', (e) => {
+                if (e.key.length !== 1) return;
+                typed = (typed + e.key.toLowerCase()).slice(-secret.length);
+                if (typed === secret) {
+                    setDevMode(20);
+                    typed = '';
+                }
+            });
+
+            window.devCountdown = setDevMode;
+        }
+
+        function launchHearts() {
+            const icons = ['💗', '💖', '💛', '💘'];
+            for (let i = 0; i < 20; i++) {
+                const h = document.createElement('div');
+                h.className = 'heart';
+                h.textContent = icons[Math.floor(Math.random() * icons.length)];
+                h.style.left = `${Math.random() * 100}vw`;
+                h.style.fontSize = `${16 + Math.random() * 20}px`;
+                h.style.animationDuration = `${3 + Math.random() * 2}s`;
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 5300);
+            }
+        }
+
+        function mountFloatingPhrases() {
+            if (!el.floatingPhrases) return;
+            el.floatingPhrases.innerHTML = '';
+
+            floatingPhrases.forEach((text, i) => {
+                const phrase = document.createElement('div');
+                phrase.className = 'phrase';
+                phrase.textContent = text;
+                phrase.style.left = `${6 + Math.random() * 78}%`;
+                phrase.style.top = `${8 + Math.random() * 78}%`;
+                phrase.style.animationDelay = `${i * 2.6}s`;
+                phrase.style.animationDuration = `${18 + Math.random() * 8}s`;
+                el.floatingPhrases.appendChild(phrase);
+            });
+        }
+
+        function createIntroHeart() {
+            if (!el.introHearts) return;
+            const icons = ['💗', '💖', '💛', '💘', '💞'];
+            const heart = document.createElement('div');
+            heart.className = 'intro-heart';
+            heart.textContent = icons[Math.floor(Math.random() * icons.length)];
+            heart.style.left = `${Math.random() * 100}vw`;
+            heart.style.fontSize = `${24 + Math.random() * 40}px`;
+            heart.style.animationDuration = `${5.8 + Math.random() * 3.4}s`;
+            el.introHearts.appendChild(heart);
+            setTimeout(() => heart.remove(), 9800);
+        }
+
+        function runIntroSequence() {
+            return new Promise((resolve) => {
+                const totalHearts = window.innerWidth < 700 ? 55 : 80;
+                const spacingMs = 48;
+
+                for (let i = 0; i < totalHearts; i++) {
+                    setTimeout(createIntroHeart, i * spacingMs);
+                }
+
+                const introDuration = totalHearts * spacingMs + 1400;
+                setTimeout(() => {
+                    if (el.introHearts) {
+                        el.introHearts.classList.add('done');
+                    }
+                    el.stage.classList.add('visible');
+                    resolve();
+                }, introDuration);
+            });
+        }
+
+        function imageExists(src) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(src);
+                img.onerror = () => resolve(null);
+                img.src = src;
+            });
+        }
+
+        async function loadActivePhotos() {
+            const results = await Promise.all(PHOTO_FILES.map(imageExists));
+            activePhotos = results.filter(Boolean);
+
+            if (!activePhotos.length) {
+                const fallback = [];
+                for (let i = 1; i <= 25; i++) {
+                    fallback.push(`fotos/${i}.jpg`, `fotos/${i}.jpeg`, `fotos/${i}.png`);
+                }
+                const fallbackResults = await Promise.all(fallback.map(imageExists));
+                activePhotos = fallbackResults.filter(Boolean);
+            }
+
+            if (!activePhotos.length) {
+                return;
+            }
+
+            mountFloatingMemories();
+        }
+
+        function mountFloatingMemories() {
+            if (!activePhotos.length || !el.floating) return;
+
+            el.floating.innerHTML = '';
+            const floatingCount = Math.min(8, activePhotos.length);
+
+            for (let i = 0; i < floatingCount; i++) {
+                const img = document.createElement('img');
+                img.className = 'memory';
+                img.src = activePhotos[i % activePhotos.length];
+                img.alt = '';
+                img.style.left = `${4 + Math.random() * 88}%`;
+                img.style.top = `${5 + Math.random() * 80}%`;
+                img.style.animationDelay = `${i * 1.8}s`;
+                img.style.animationDuration = `${14 + Math.random() * 8}s`;
+                el.floating.appendChild(img);
+            }
+        }
+
+        function setupAudio() {
+            el.audioModal.classList.add('open');
+            el.audio.play().catch(() => { });
+
+            el.enableAudio.addEventListener('click', () => {
+                try {
+                    el.audio.muted = false;
+                } catch (error) {
+                    // ignore
+                }
+                el.audio.play().catch(() => { });
+                el.audioModal.classList.remove('open');
+            });
+        }
+
+        function setupRevealFallback() {
+            el.revealImg.addEventListener('error', () => {
+                el.revealPhoto.classList.remove('visible');
+                el.reveal.textContent = '🎁 Falta cargar la imagen de revelación en fotos/revelacion.png';
+            });
+        }
+
+        async function init() {
+            setupSecretDev();
+            setupRevealFallback();
+            mountFloatingPhrases();
+            loadActivePhotos();
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            await runIntroSequence();
+            setupAudio();
+        }
+
+        init();
+    </script>
 </body>
+
 </html>
