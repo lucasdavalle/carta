@@ -283,32 +283,49 @@
             max-height: 92vh;
             z-index: 20;
             border-radius: 16px;
-            overflow-y: auto;
+            overflow: hidden;
             border: 1px solid #efb8c9;
             background: #fff;
             box-shadow: 0 14px 28px rgba(185, 95, 121, 0.2);
             animation: revealIn .5s ease;
+            flex-direction: column;
         }
 
         .reveal-photo.visible {
-            display: block;
+            display: flex;
         }
 
         .reveal-photo img {
             width: 100%;
             display: block;
-            max-height: 75vh;
+            max-height: 40vh;
             object-fit: contain;
+            flex-shrink: 0;
         }
 
         .reveal-photo p {
             margin: 0;
-            text-align: center;
-            padding: 14px 16px;
-            font-size: clamp(15px, 2.2vw, 18px);
-            font-weight: 600;
+            text-align: left;
+            padding: 24px 28px;
+            font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+            font-size: clamp(14px, 2vw, 16px);
+            font-weight: 400;
             color: #8e4660;
-            line-height: 1.5;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .reveal-photo p em {
+            font-style: italic;
+            color: var(--title);
+            font-weight: 500;
+        }
+
+        .reveal-photo p strong {
+            color: var(--primary);
+            font-weight: 700;
         }
 
         .reveal-btn-container {
@@ -601,10 +618,6 @@
                 </div>
             </div>
 
-            <div class="hint" id="hint">Mensaje inicial: sos mi lugar favorito en el mundo.
-            </div>
-            <div class="reveal" id="reveal">🔒 El regalo se revela el 3 de marzo.</div>
-
             <audio class="audio" id="audio" src="audio/cancion.mp3" preload="auto" autoplay loop muted
                 playsinline></audio>
         </section>
@@ -612,8 +625,18 @@
 
     <div class="reveal-photo" id="revealPhoto">
         <img src="fotos/revelacion.png" alt="Sorpresa especial" id="revealImg" />
-        <p>🎁 Por fin vamos a poder cumplir este sueñito juntos: nuestro viajecito de egresados. Te amo
-            muchísimo; ahora a planear el hospedaje y los destinos.</p>
+        <p><em>¡Nos vamos a Europa!</em> El vuelo sale el <strong>24 de mayo</strong> y volvemos el <strong>15 de
+                junio</strong>. Vamos a pasar tu cumple en algún lugarcito hermoso de Europa, ¡a decidir juntos!
+            <br><br>
+
+            Lo vengo planeando hace rato, en octubre pude comprar los pasajes (obvio con ayuda de Carla). Al
+            principio saqué solo los vuelos, pero después entré en razón: no voy a sufrir 10 horas de viaje incómodo,
+            así que pagué los asientos XL para los vuelos hacia Europa. ¡Tienen embarque prioritario y todo! (¿Te
+            ilusionaste con business? jajaja no me dio el presupuesto, eran básicamente dos pasajes más)<br><br>
+
+            Ya hablé en el trabajo, no sé qué días me van a dar pero bueno, ¡lo importante es que se hace realidad! Te
+            amo muchísimo, ahora a planear hospedaje y destinos.
+        </p>
     </div>
 
     <div class="modal-bg" id="audioModal" aria-modal="true" role="dialog">
@@ -685,8 +708,8 @@
         function getTargetDate() {
             const now = new Date();
             const y = now.getFullYear();
-            const d = new Date(y, 2, 3, 0, 0, 0);
-            return now <= d ? d : new Date(y + 1, 2, 3, 0, 0, 0);
+            const d = new Date(y, 2, 3, 16, 0, 0);
+            return now <= d ? d : new Date(y + 1, 2, 3, 16, 0, 0);
         }
 
         function revealNow() {
