@@ -806,8 +806,25 @@
             countdownTarget = new Date(Date.now() + safeSeconds * 1000);
             revealDone = false;
             el.revealPhoto.classList.remove('visible');
-            el.reveal.textContent = '🔒 Modo dev activo: prueba de revelación en curso.';
-            el.hint.textContent = `🧪 Prueba rápida: revelación en ${safeSeconds} segundos.`;
+            if (el.revealBtnContainer) {
+                el.revealBtnContainer.classList.remove('visible');
+            }
+            if (el.card) {
+                el.card.style.display = '';
+                el.card.style.opacity = '1';
+            }
+            if (el.floatingMemories) {
+                el.floatingMemories.style.opacity = '1';
+            }
+            if (el.floatingPhrases) {
+                el.floatingPhrases.style.opacity = '1';
+            }
+            if (el.reveal) {
+                el.reveal.textContent = 'Modo dev activo: prueba de revelación en curso.';
+            }
+            if (el.hint) {
+                el.hint.textContent = `Prueba rápida: revelación en ${safeSeconds} segundos.`;
+            }
             updateCountdown();
         }
 
@@ -960,7 +977,9 @@
         function setupRevealFallback() {
             el.revealImg.addEventListener('error', () => {
                 el.revealPhoto.classList.remove('visible');
-                el.reveal.textContent = '🎁 Falta cargar la imagen de revelación en fotos/revelacion.png';
+                if (el.reveal) {
+                    el.reveal.textContent = 'Falta cargar la imagen de revelación en fotos/revelacion.png';
+                }
             });
         }
 
